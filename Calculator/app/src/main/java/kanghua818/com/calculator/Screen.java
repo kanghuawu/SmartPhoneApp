@@ -3,34 +3,26 @@ package kanghua818.com.calculator;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import static kanghua818.com.calculator.Screen.Action.INITIAL;
-
 
 /**
  * Created by bondk on 9/29/17.
  */
 
 public class Screen {
+    private static final String ERROR = "ERROR!";
     public double value = 0D;
-    public Action action = INITIAL;
-
     private final TextView textView;
 
     public Screen(final TextView textView) {
         this.textView = textView;
     }
 
-    public double getValue() {
-        return value;
+    public void setValue(double newValue) {
+        this.textView.setText(customizedRound(newValue));
     }
 
-    public void setValue(double newValue) {
-        if (isOverflow(getAppendedValue(newValue))) {
-            showOverflow();
-            return;
-        }
-        this.value = getAppendedValue(newValue);
-        this.textView.setText(Math.round(this.value) + "");
+    private String customizedRound(final double value) {
+        return ((value<0) ? "-" : "") + Math.round(Math.abs(value));
     }
 
     public void clear() {
@@ -39,32 +31,8 @@ public class Screen {
         this.textView.setText("0");
     }
 
-    private boolean isInitialValue() {
-        return this.value == 0D;
+    public void showError() {
+        this.textView.setText(ERROR);
     }
 
-    private double getAppendedValue(double newValue) {
-        return this.value * 10 + newValue;
-    }
-
-    private boolean isOverflow(final double value) {
-        if (value > 9999999 || value < -9999999) {
-            return true;
-        }
-        return false;
-    }
-
-    private void showOverflow() {
-        this.textView.setText("ERROR!");
-    }
-
-    public enum Action{
-        INITIAL,
-        PLUS,
-        MINUS,
-        MULTIPLY,
-        DIVIDE,
-        EQUALS,
-        CLEAR
-    }
 }

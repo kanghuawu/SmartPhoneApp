@@ -1,16 +1,12 @@
 package kanghua818.com.calculator;
 
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import static android.R.attr.button;
 
 public class MainActivity extends AppCompatActivity {
     Button mOneButton, mTwoButton, mThreeButton, mFourButton, mFiveButton, mSixButton, mSevenButton,
@@ -25,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) this.findViewById(R.id.screen);
         textView.setSelected(true);
 
-        final Screen screen = new Screen(textView);
+        final Calculator calculator = new Calculator(new Screen(textView));
 
         mOneButton = (Button) findViewById(R.id.oneButton);
         mTwoButton = (Button) findViewById(R.id.twoButton);
@@ -37,35 +33,69 @@ public class MainActivity extends AppCompatActivity {
         mEightButton = (Button) findViewById(R.id.eightButton);
         mNineButton = (Button) findViewById(R.id.nineButton);
         mZeroButton = (Button) findViewById(R.id.zeroButton);
-        setDigitalButtonHandler(mOneButton, screen, 1);
-        setDigitalButtonHandler(mTwoButton, screen, 2);
-        setDigitalButtonHandler(mThreeButton, screen, 3);
-        setDigitalButtonHandler(mFourButton, screen, 4);
-        setDigitalButtonHandler(mFiveButton, screen, 5);
-        setDigitalButtonHandler(mSixButton, screen, 6);
-        setDigitalButtonHandler(mSevenButton, screen, 7);
-        setDigitalButtonHandler(mEightButton, screen, 8);
-        setDigitalButtonHandler(mNineButton, screen, 9);
-        setDigitalButtonHandler(mZeroButton, screen, 0);
+        setDigitalButtonHandler(mOneButton, calculator, 1);
+        setDigitalButtonHandler(mTwoButton, calculator, 2);
+        setDigitalButtonHandler(mThreeButton, calculator, 3);
+        setDigitalButtonHandler(mFourButton, calculator, 4);
+        setDigitalButtonHandler(mFiveButton, calculator, 5);
+        setDigitalButtonHandler(mSixButton, calculator, 6);
+        setDigitalButtonHandler(mSevenButton, calculator, 7);
+        setDigitalButtonHandler(mEightButton, calculator, 8);
+        setDigitalButtonHandler(mNineButton, calculator, 9);
+        setDigitalButtonHandler(mZeroButton, calculator, 0);
 
         mClearButton = (Button) findViewById(R.id.clearButton);
         mClearButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    screen.clear();
+                    calculator.act(Calculator.Action.INITIAL_OR_CLEAR, 0);
                 }
                 return true;
             }
         });
 
         mPlusButton = (Button) findViewById(R.id.addButton);
+        setOperandButtonHandler(mPlusButton, calculator, Calculator.Action.ADD);
+
         mMinusButton = (Button) findViewById(R.id.subtractButton);
+        setOperandButtonHandler(mMinusButton, calculator, Calculator.Action.SUBTRACT);
+
         mMultiplyButton = (Button) findViewById(R.id.multiplyBbutton);
+        setOperandButtonHandler(mMultiplyButton, calculator, Calculator.Action.MULTIPLY);
+
         mDivideButton = (Button) findViewById(R.id.divideButton);
+        setOperandButtonHandler(mDivideButton, calculator, Calculator.Action.DIVIDE);
+
+        mEqualButton = (Button) findViewById(R.id.equalButton);
+        setOperandButtonHandler(mEqualButton, calculator, Calculator.Action.EQUAL);
     }
 
-    private void setDigitalButtonHandler(final Button button, final Screen screen, final double buttonValue) {
+    private void setOperandButtonHandler(final Button button, final Calculator calculator, final Calculator.Action action) {
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    button.setBackgroundColor(0xFF00FF00);
+                    MainActivity.this.clearMarquee();
+                    textView.setGravity(Gravity.RIGHT);
+                    return true;
+                }
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP){
+                    button.setBackgroundResource(R.drawable.num_button);
+                    clearMarquee();
+                    textView.setGravity(Gravity.RIGHT);
+                    calculator.act(action, 0);
+                    return false;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void setDigitalButtonHandler(final Button button, final Calculator calculator, final double buttonValue) {
+
+//        button.setOnClickListener();
 
         button.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -81,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
                     button.setBackgroundResource(R.drawable.num_button);
                     clearMarquee();
                     textView.setGravity(Gravity.RIGHT);
-//                    textView.setText("123");
-                    screen.setValue(buttonValue);
+                    calculator.act(Calculator.Action.APPEND_DIGIT, buttonValue);
+//                    screen.setValue(buttonValue);
                     return false;
                 }
                 return false;
