@@ -5,6 +5,8 @@ import android.widget.TextView;
 
 
 /**
+ * Calculator screen displaying current processing number
+ *
  * Created by bondk on 9/29/17.
  */
 
@@ -33,6 +35,11 @@ public class Screen {
 
     public void showError() {
         this.textView.setText(ERROR);
+    }
+
+    public void clearMarquee() {
+        this.textView.setEllipsize(null);
+        this.textView.setGravity(Gravity.RIGHT);
     }
 
 }

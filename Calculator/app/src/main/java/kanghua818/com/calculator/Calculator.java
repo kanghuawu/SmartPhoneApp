@@ -3,9 +3,10 @@ package kanghua818.com.calculator;
 import static kanghua818.com.calculator.Calculator.Action.*;
 
 /**
+ * Simple calculator including add, subtract, multiply, and divide.
+ *
  * Created by bondk on 9/30/17.
  */
-
 public class Calculator {
 
     private static final double INITIAL_VALUE = 0D;
@@ -23,6 +24,7 @@ public class Calculator {
     }
 
     public void act(final Action newAction, double inputValue) {
+        clearMarquee();
         if (isNegating(newAction)) {
             act(NEGATE, 0);
             return;
@@ -72,6 +74,10 @@ public class Calculator {
             default:
                 break;
         }
+    }
+
+    public void clearMarquee() {
+        this.screen.clearMarquee();
     }
 
     private void err() {
@@ -130,6 +136,9 @@ public class Calculator {
         return this.current * 10 + newValue;
     }
 
+    /**
+     * Actions of buttons on Calculator
+     */
     public enum Action{
         INITIAL_OR_CLEAR,
         APPEND_DIGIT,
