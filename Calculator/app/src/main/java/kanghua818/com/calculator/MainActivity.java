@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     calculator.act(action, 0);
                     return false;
                 }
-                return false;
+                return true;
             }
         });
     }
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     calculator.act(Calculator.Action.APPEND_DIGIT, buttonValue);
                     return false;
                 }
-                return false;
+                return true;
             }
         });
     }

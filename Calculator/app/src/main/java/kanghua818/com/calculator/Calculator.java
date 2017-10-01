@@ -9,7 +9,7 @@ import static kanghua818.com.calculator.Calculator.Action.*;
  */
 public class Calculator {
 
-    private static final double INITIAL_VALUE = 0D;
+    private static final double INITIAL_VALUE = Double.MAX_VALUE;
     private static final double ZERO = 0D;
     private static final double CUSTOMIZED_MAX_VALUE = 9999999;
 
@@ -34,16 +34,23 @@ public class Calculator {
             case SUBTRACT:
             case MULTIPLY:
             case DIVIDE:
+                if (isClearState()) {
+                    return;
+                }
                 if (result == INITIAL_VALUE || newAction == INITIAL_OR_CLEAR) {
                     result = current;
+                } else if (current == INITIAL_VALUE ) {
+                    // DO NOTHING
                 } else {
                     operate();
-
                 }
                 current = INITIAL_VALUE;
                 this.operation = newAction;
                 break;
             case EQUAL:
+                if (current == INITIAL_VALUE || result == INITIAL_VALUE) {
+                    return;
+                }
                 operate();
                 current = INITIAL_VALUE;
                 this.operation = newAction;
@@ -126,6 +133,9 @@ public class Calculator {
     }
 
     private boolean isOverflow(final double value) {
+        if (value == INITIAL_VALUE) {
+            return false;
+        }
         if (value > CUSTOMIZED_MAX_VALUE || value < -CUSTOMIZED_MAX_VALUE) {
             return true;
         }
@@ -133,6 +143,9 @@ public class Calculator {
     }
 
     private double getAppendedValue(double newValue) {
+        if (current == INITIAL_VALUE) {
+            return newValue;
+        }
         return this.current * 10 + newValue;
     }
 
