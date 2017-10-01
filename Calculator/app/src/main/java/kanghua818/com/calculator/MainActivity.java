@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import static android.R.attr.button;
+
 public class MainActivity extends AppCompatActivity {
     Button mOneButton, mTwoButton, mThreeButton, mFourButton, mFiveButton, mSixButton, mSevenButton,
             mEightButton, mNineButton, mZeroButton, mClearButton, mPlusButton, mMinusButton,
@@ -48,7 +50,11 @@ public class MainActivity extends AppCompatActivity {
         mClearButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    mClearButton.setPressed(true);
+                }
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    mClearButton.setPressed(false);
                     calculator.act(Calculator.Action.INITIAL_OR_CLEAR, 0);
                 }
                 return true;
@@ -76,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    button.setBackgroundColor(0xFF00FF00);
+                    button.setPressed(true);
                     MainActivity.this.clearMarquee();
                     textView.setGravity(Gravity.RIGHT);
                     return true;
                 }
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP){
-                    button.setBackgroundResource(R.drawable.num_button);
+                    button.setPressed(false);
                     clearMarquee();
                     textView.setGravity(Gravity.RIGHT);
                     calculator.act(action, 0);
@@ -94,25 +100,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setDigitalButtonHandler(final Button button, final Calculator calculator, final double buttonValue) {
-
-//        button.setOnClickListener();
-
         button.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    button.setBackgroundColor(0xFF00FF00);
-//                    button.setBackgroundResource(R.drawable.num_button);
+                    button.setPressed(true);
                     MainActivity.this.clearMarquee();
                     textView.setGravity(Gravity.RIGHT);
                     return true;
                 }
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP){
-                    button.setBackgroundResource(R.drawable.num_button);
+                    button.setPressed(false);
                     clearMarquee();
                     textView.setGravity(Gravity.RIGHT);
                     calculator.act(Calculator.Action.APPEND_DIGIT, buttonValue);
-//                    screen.setValue(buttonValue);
                     return false;
                 }
                 return false;
