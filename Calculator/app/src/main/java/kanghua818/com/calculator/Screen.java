@@ -23,7 +23,7 @@ public class Screen {
         this.textView.setText(customizedRound(newValue));
     }
 
-    private String customizedRound(final double value) {
+    String customizedRound(final double value) {
         return ((value<0) ? "-" : "") + Math.round(Math.abs(value));
     }
 
@@ -40,6 +40,10 @@ public class Screen {
     public void clearMarquee() {
         this.textView.setEllipsize(null);
         this.textView.setGravity(Gravity.RIGHT);
+    }
+
+    public String getDisplayText() {
+        return (textView != null) ? (String) textView.getText() : null;
     }
 
 }

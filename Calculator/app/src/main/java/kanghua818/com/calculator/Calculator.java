@@ -156,6 +156,10 @@ public class Calculator {
         }
     }
 
+    public String getDisplayText() {
+        return this.screen.getDisplayText();
+    }
+
     /**
      * Actions of buttons on Calculator
      */
