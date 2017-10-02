@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     binding.clearButton.setPressed(false);
-                    calculator.act(Calculator.Action.INITIAL_OR_CLEAR, 0);
+                    calculator.act(Calculator.Action.INITIAL_OR_CLEAR, null);
                 }
                 return true;
             }
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP){
                     button.setPressed(false);
-                    calculator.act(action, 0);
+                    calculator.act(action, null);
                     return false;
                 }
                 return true;

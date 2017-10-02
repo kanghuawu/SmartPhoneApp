@@ -1,5 +1,6 @@
 package kanghua818.com.calculator;
 
+
 import static kanghua818.com.calculator.Calculator.Action.*;
 
 /**
@@ -9,12 +10,12 @@ import static kanghua818.com.calculator.Calculator.Action.*;
  */
 public class Calculator {
 
-    private static final double INITIAL_VALUE = Double.MAX_VALUE;
-    private static final double ZERO = 0D;
-    private static final double CUSTOMIZED_MAX_VALUE = 9999999;
+    private static final Double ZERO = 0D;
+    private static final Double INITIAL_VALUE = null;
+    private static final Double CUSTOMIZED_MAX_VALUE = 9999999D;
 
-    private double result = INITIAL_VALUE;
-    private double current = INITIAL_VALUE;
+    private Double result = INITIAL_VALUE;
+    private Double current = INITIAL_VALUE;
     private Action operation = INITIAL_OR_CLEAR;
 
     private Screen screen;
@@ -23,10 +24,10 @@ public class Calculator {
         this.screen = screen;
     }
 
-    public void act(final Action newAction, double inputValue) {
+    public void act(final Action newAction, final Double inputValue) {
         clearMarquee();
         if (isNegating(newAction)) {
-            act(NEGATE, 0);
+            act(NEGATE, null);
             return;
         }
         switch (newAction) {
@@ -37,11 +38,11 @@ public class Calculator {
                 if (isClearState()) {
                     return;
                 }
-                if (result == INITIAL_VALUE || newAction == INITIAL_OR_CLEAR) {
-                    result = current;
+                if (result == INITIAL_VALUE) {
+                    pushCurrentToResult();
                 } else if (current == INITIAL_VALUE ) {
                     // DO NOTHING
-                } else {
+                } else { // current is not initial and result is not initial
                     operate();
                 }
                 current = INITIAL_VALUE;
@@ -49,6 +50,7 @@ public class Calculator {
                 break;
             case EQUAL:
                 if (current == INITIAL_VALUE || result == INITIAL_VALUE) {
+                    err();
                     return;
                 }
                 operate();
@@ -81,6 +83,10 @@ public class Calculator {
             default:
                 break;
         }
+    }
+
+    private void pushCurrentToResult() {
+        result = current;
     }
 
     public void clearMarquee() {
@@ -132,7 +138,7 @@ public class Calculator {
         return false;
     }
 
-    private boolean isOverflow(final double value) {
+    private boolean isOverflow(final Double value) {
         if (value == INITIAL_VALUE) {
             return false;
         }
@@ -142,11 +148,12 @@ public class Calculator {
         return false;
     }
 
-    private double getAppendedValue(double newValue) {
+    private Double getAppendedValue(Double newValue) {
         if (current == INITIAL_VALUE) {
-            return newValue;
+            return new Double(newValue);
+        } else {
+            return new Double(this.current * 10D + newValue);
         }
-        return this.current * 10 + newValue;
     }
 
     /**
